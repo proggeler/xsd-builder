@@ -1,0 +1,30 @@
+{
+    "name": "davidbadura/xsd-builder",
+    "description": "Xsd Builder",
+    "keywords": ["xml", "xsd", "builder", "generator"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name" : "David Badura",
+        "email" : "d.badura@gmx.de"
+    }],
+    "require": {
+        "php": ">=7.4",
+        "ext-dom": "*"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^5.0",
+        "phpunit/phpunit": "^9.2.6",
+        "spatie/phpunit-snapshot-assertions": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "DavidBadura\\XsdBuilder\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DavidBadura\\XsdBuilder\\Test\\": "tests"
+        }
+    }
+}
