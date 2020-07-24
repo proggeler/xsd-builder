@@ -7,6 +7,7 @@ class Attribute
     private string $name;
     private string $type;
     private ?string $default = null;
+    private ?string $use = null;
 
     private function __construct()
     {
@@ -25,6 +26,11 @@ class Attribute
     public function setDefault($default): void
     {
         $this->default = $default;
+    }
+
+    public function setUse($use): void
+    {
+        $this->use = $use;
     }
 
     public function default(): ?string
@@ -62,6 +68,24 @@ class Attribute
         return self::create($name, Type::TIME);
     }
 
+    public static function id(string $name): self
+    {
+        $el = self::create($name, Type::ID);
+        $el->setUse('required');
+
+        return $el;
+    }
+
+    public static function idRef(string $name): self
+    {
+        return self::create($name, Type::IDREF);
+    }
+
+    public static function idRefs(string $name): self
+    {
+        return self::create($name, Type::IDREFS);
+    }
+
     public static function create(string $name, string $type): self
     {
         $self = new self();
@@ -79,6 +103,10 @@ class Attribute
 
         if ($this->default) {
             $el->setAttribute('default', $this->default);
+        }
+
+        if ($this->use) {
+            $el->setAttribute('use', $this->use);
         }
 
         return $el;

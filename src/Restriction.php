@@ -5,12 +5,16 @@ namespace DavidBadura\XsdBuilder;
 class Restriction
 {
     private string $base;
-    private ?int $minLength;
-    private ?int $maxLength;
-    private ?int $minInclusive;
-    private ?int $maxInclusive;
-    private ?array $enumeration;
-    private ?string $pattern;
+    private ?int $minLength = null;
+    private ?int $maxLength = null;
+    private ?int $minInclusive = null;
+    private ?int $maxInclusive = null;
+    private ?array $enumeration = null;
+    private ?string $pattern = null;
+
+    private function __construct()
+    {
+    }
 
     public static function regex(string $regex): self
     {

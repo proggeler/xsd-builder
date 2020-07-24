@@ -10,4 +10,8 @@ class Type
     public const BOOLEAN = 'xs:boolean';
     public const DATE = 'xs:date';
     public const TIME = 'xs:time';
+
+    public const ID = 'xs:ID';
+    public const IDREF = 'xs:IDREF';
+    public const IDREFS = 'xs:IDREFS';
 }

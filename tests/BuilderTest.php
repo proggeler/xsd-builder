@@ -8,7 +8,6 @@ use DavidBadura\XsdBuilder\ComplexType;
 use DavidBadura\XsdBuilder\Element;
 use DavidBadura\XsdBuilder\Restriction;
 use DavidBadura\XsdBuilder\SimpleType;
-use DavidBadura\XsdBuilder\Type;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -19,14 +18,14 @@ class BuilderTest extends TestCase
 {
     use MatchesSnapshots;
 
-    public function testEmptyXsd()
+    public function testEmptyXsd(): void
     {
         $builder = new Builder();
 
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testStringElement()
+    public function testStringElement(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::string('name'));
@@ -34,7 +33,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testIntegerElement()
+    public function testIntegerElement(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::integer('age'));
@@ -42,7 +41,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testDecimalElement()
+    public function testDecimalElement(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::decimal('age'));
@@ -50,7 +49,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testBooleanElement()
+    public function testBooleanElement(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::boolean('dead'));
@@ -58,7 +57,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testDateElement()
+    public function testDateElement(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::date('birthdate'));
@@ -66,7 +65,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testTimeElement()
+    public function testTimeElement(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::time('shipped'));
@@ -74,7 +73,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testStringAttribute()
+    public function testStringAttribute(): void
     {
         $builder = new Builder();
         $builder->addAttribute(Attribute::string('name'));
@@ -82,7 +81,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testIntegerAttribute()
+    public function testIntegerAttribute(): void
     {
         $builder = new Builder();
         $builder->addAttribute(Attribute::integer('age'));
@@ -90,7 +89,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testDecimalAttribute()
+    public function testDecimalAttribute(): void
     {
         $builder = new Builder();
         $builder->addAttribute(Attribute::decimal('age'));
@@ -98,7 +97,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testBooleanAttribute()
+    public function testBooleanAttribute(): void
     {
         $builder = new Builder();
         $builder->addAttribute(Attribute::boolean('dead'));
@@ -106,7 +105,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testDateAttribute()
+    public function testDateAttribute(): void
     {
         $builder = new Builder();
         $builder->addAttribute(Attribute::date('birthdate'));
@@ -114,7 +113,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testTimeAttribute()
+    public function testTimeAttribute(): void
     {
         $builder = new Builder();
         $builder->addAttribute(Attribute::time('shipped'));
@@ -122,7 +121,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testEmptyComplexType()
+    public function testEmptyComplexType(): void
     {
         $builder = new Builder();
         $builder->addComplexType(new ComplexType('user'));
@@ -130,7 +129,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testComplexTypeWithElements()
+    public function testComplexTypeWithElements(): void
     {
         $builder = new Builder();
         $user = new ComplexType('user');
@@ -142,7 +141,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testComplexTypeWithAttributes()
+    public function testComplexTypeWithAttributes(): void
     {
         $builder = new Builder();
         $user = new ComplexType('user');
@@ -154,7 +153,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testElementWithCustomType()
+    public function testElementWithCustomType(): void
     {
         $builder = new Builder();
         $builder->addElement(Element::create('user', 'user'));
@@ -162,7 +161,7 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testElementWithEmbeddedComplexType()
+    public function testElementWithEmbeddedComplexType(): void
     {
         $user = new ComplexType();
         $user->addElement(Element::string('name'));
@@ -174,21 +173,66 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testSimpleTypeElement()
+    public function testElementWithEmbeddedSimpleType(): void
     {
+        $name = SimpleType::string('name');
+
         $builder = new Builder();
-        $builder->addSimpleType(new SimpleType('name', Type::STRING));
+        $builder->addElement(Element::simpleType('user', $name));
 
         $this->assertMatchesSnapshot($builder->toString());
     }
 
-    public function testSimpleElementWithRestriction()
+    public function testSimpleTypeElement(): void
+    {
+        $builder = new Builder();
+        $builder->addSimpleType(SimpleType::string('name'));
+
+        $this->assertMatchesSnapshot($builder->toString());
+    }
+
+    public function testSimpleElementWithRestriction(): void
     {
         $regex = Restriction::regex('[0-9]*');
 
         $builder = new Builder();
-        $builder->addSimpleType(new SimpleType('name', null, $regex));
+        $builder->addSimpleType(SimpleType::withRestriction('name', $regex));
 
         $this->assertMatchesSnapshot($builder->toString());
     }
+
+    public function testIds(): void
+    {
+        $book = new ComplexType();
+        $book->addElement(Element::string('isbn'));
+        $book->addElement(Element::integer('title'));
+        $book->addElement(Element::idRef('author-ref'));
+        $book->addElement(Element::idRefs('character-refs'));
+        $book->addAttribute(Attribute::id('identifier'));
+
+        $builder = new Builder();
+        $builder->addElement(Element::complexType('book', $book));
+
+        $this->assertMatchesSnapshot($builder->toString());
+    }
+
+
+    /*
+     *
+     <xs:element name="book">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="isbn" type="xs:int"/>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="author-ref">
+                <xs:complexType>
+                    <xs:attribute name="ref" type="xs:IDREF" use="required"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="character-refs" type="xs:IDREFS"/>
+        </xs:sequence>
+        <xs:attribute name="identifier" type="xs:ID" use="required"/>
+    </xs:complexType>
+</xs:element>
+     */
 }

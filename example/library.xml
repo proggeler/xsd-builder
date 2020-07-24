@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<library
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="library.xsd">
+
+
+
+    <books>
+        <book identifier="sina">
+            <isbn></isbn>
+            <title></title>
+            <author>sina</author>
+        </book>
+        <book identifier="foo">
+            <isbn></isbn>
+            <title></title>
+            <author>a</author>
+        </book>
+    </books>
+
+    <authors>
+        <author identifier="sina">
+            <name>Sina</name>
+        </author>
+
+        <author identifier="foo">
+            <name>Sina</name>
+        </author>
+    </authors>
+
+</library>

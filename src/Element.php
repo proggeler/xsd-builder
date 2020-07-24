@@ -8,7 +8,12 @@ class Element
     private ?string $type = null;
     private ?ComplexType $complexType = null;
     private ?SimpleType $simpleType = null;
+    private ?Key $key = null;
+    private ?Unique $unique = null;
+    private array $keyRefs = [];
     private ?string $default = null;
+    private ?int $maxOccurs = null;
+    private ?int $minOccurs = null;
     private bool $unbounded = false;
 
     private function __construct()
@@ -40,6 +45,31 @@ class Element
         $this->unbounded = $unbounded;
     }
 
+    public function setMinOccurs(int $number): void
+    {
+        $this->minOccurs = $number;
+    }
+
+    public function setMaxOccurs(int $number): void
+    {
+        $this->maxOccurs = $number;
+    }
+
+    public function setKey(Key $key): void
+    {
+        $this->key = $key;
+    }
+
+    public function setUnique(Unique $unique): void
+    {
+        $this->unique = $unique;
+    }
+
+    public function addKeyRef(KeyRef $keyRef): void
+    {
+        $this->keyRefs[] = $keyRef;
+    }
+
     public static function string(string $name): self
     {
         return self::create($name, Type::STRING);
@@ -68,6 +98,21 @@ class Element
     public static function time(string $name): self
     {
         return self::create($name, Type::TIME);
+    }
+
+    public static function id(string $name): self
+    {
+        return self::create($name, Type::ID);
+    }
+
+    public static function idRef(string $name): self
+    {
+        return self::create($name, Type::IDREF);
+    }
+
+    public static function idRefs(string $name): self
+    {
+        return self::create($name, Type::IDREFS);
     }
 
     public static function create(string $name, string $type): self
@@ -102,8 +147,20 @@ class Element
         $el = $dom->createElement('xs:element');
         $el->setAttribute('name', $this->name);
 
+        if ($this->unbounded && $this->maxOccurs) {
+            throw new \RuntimeException();
+        }
+
         if ($this->unbounded) {
             $el->setAttribute('maxOccurs', 'unbounded');
+        }
+
+        if ($this->maxOccurs !== null) {
+            $el->setAttribute('maxOccurs', (string)$this->maxOccurs);
+        }
+
+        if ($this->minOccurs !== null) {
+            $el->setAttribute('minOccurs', (string)$this->minOccurs);
         }
 
         if ($this->type) {
@@ -112,22 +169,28 @@ class Element
             if ($this->default) {
                 $el->setAttribute('default', $this->default);
             }
-
-            return $el;
         }
 
         if ($this->simpleType) {
             $el->appendChild($this->simpleType->createDomElement($dom));
-
-            return $el;
         }
 
         if ($this->complexType) {
             $el->appendChild($this->complexType->createDomElement($dom));
-
-            return $el;
         }
 
-        throw new \RuntimeException();
+        if ($this->unique) {
+            $el->appendChild($this->unique->createDomElement($dom));
+        }
+
+        if ($this->key) {
+            $el->appendChild($this->key->createDomElement($dom));
+        }
+
+        foreach ($this->keyRefs as $keyRef) {
+            $el->appendChild($keyRef->createDomElement($dom));
+        }
+
+        return $el;
     }
 }
