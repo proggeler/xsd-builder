@@ -8,7 +8,7 @@
         <xs:element name="author-ref" type="xs:IDREF"/>
         <xs:element name="character-refs" type="xs:IDREFS"/>
       </xs:sequence>
-      <xs:attribute name="identifier" type="xs:ID"/>
+      <xs:attribute name="identifier" type="xs:ID" use="required"/>
     </xs:complexType>
   </xs:element>
 </xs:schema>

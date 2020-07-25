@@ -12,12 +12,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 /* Library */
 
 $builder = new Builder();
-$library = new ComplexType();
+$library = ComplexType::create();
 $builder->addElement(Element::complexType('library', $library));
 
 /* Books */
 
-$books = new ComplexType();
+$books = ComplexType::create();
 $booksEl = Element::complexType('books', $books);
 $booksEl->setKey(Key::create('book-id', 'book', ['@identifier']));
 $booksEl->addKeyRef(KeyRef::create('author-ref', 'book-id', 'book', 'author'));
@@ -25,7 +25,7 @@ $library->addElement($booksEl);
 
 /* Book */
 
-$book = new ComplexType();
+$book = ComplexType::createSequence();
 $book->addElement(Element::string('isbn'));
 $book->addElement(Element::string('title'));
 $book->addElement(Element::string('author'));
@@ -42,14 +42,14 @@ $books->addElement($bookEl);
 
 /* Authors */
 
-$authors = new ComplexType();
+$authors = ComplexType::create();
 $authorsEl = Element::complexType('authors', $authors);
 $authorsEl->setKey(Key::create('author-id', 'author', ['@identifier']));
 $library->addElement($authorsEl);
 
 /* Author */
 
-$author = new ComplexType();
+$author = ComplexType::createSequence();
 $author->addElement(Element::string('name'));
 $author->addAttribute(Attribute::string('identifier'));
 
@@ -58,8 +58,6 @@ $authorEl->setMinOccurs(0);
 $authorEl->setUnbounded(true);
 
 $authors->addElement($authorEl);
-
-
 
 
 file_put_contents(__DIR__ . '/library.xsd', $builder->toString());

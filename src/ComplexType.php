@@ -5,6 +5,7 @@ namespace DavidBadura\XsdBuilder;
 class ComplexType
 {
     private ?string $name;
+    private bool $sequence = false;
 
     /**
      * @var Element[]
@@ -16,9 +17,22 @@ class ComplexType
      */
     private array $attributes = [];
 
-    public function __construct(?string $name = null)
+    private function __construct()
     {
-        $this->name = $name;
+    }
+
+    public static function create(?string $name = null, bool $sequence = false): self
+    {
+        $self = new self();
+        $self->name = $name;
+        $self->sequence = $sequence;
+
+        return $self;
+    }
+
+    public static function createSequence(?string $name = null): self
+    {
+        return self::create($name, true);
     }
 
     public function name(): ?string
@@ -55,11 +69,11 @@ class ComplexType
         }
 
         if (count($this->elements) > 0) {
-            $sequence = $dom->createElement('xs:sequence');
-            $el->appendChild($sequence);
+            $container = $dom->createElement($this->sequence ? 'xs:sequence' : 'xs:all');
+            $el->appendChild($container);
 
             foreach ($this->elements as $element) {
-                $sequence->appendChild($element->createDomElement($dom));
+                $container->appendChild($element->createDomElement($dom));
             }
         }
 

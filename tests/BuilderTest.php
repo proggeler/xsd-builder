@@ -124,7 +124,7 @@ class BuilderTest extends TestCase
     public function testEmptyComplexType(): void
     {
         $builder = new Builder();
-        $builder->addComplexType(new ComplexType('user'));
+        $builder->addComplexType(ComplexType::create('user'));
 
         $this->assertMatchesSnapshot($builder->toString());
     }
@@ -132,7 +132,19 @@ class BuilderTest extends TestCase
     public function testComplexTypeWithElements(): void
     {
         $builder = new Builder();
-        $user = new ComplexType('user');
+        $user = ComplexType::create('user');
+        $user->addElement(Element::string('name'));
+        $user->addElement(Element::integer('age'));
+
+        $builder->addComplexType($user);
+
+        $this->assertMatchesSnapshot($builder->toString());
+    }
+
+    public function testComplexTypeWithElementsInSquence(): void
+    {
+        $builder = new Builder();
+        $user = ComplexType::createSequence('user');
         $user->addElement(Element::string('name'));
         $user->addElement(Element::integer('age'));
 
@@ -144,7 +156,7 @@ class BuilderTest extends TestCase
     public function testComplexTypeWithAttributes(): void
     {
         $builder = new Builder();
-        $user = new ComplexType('user');
+        $user = ComplexType::create('user');
         $user->addAttribute(Attribute::string('name'));
         $user->addAttribute(Attribute::integer('age'));
 
@@ -163,7 +175,7 @@ class BuilderTest extends TestCase
 
     public function testElementWithEmbeddedComplexType(): void
     {
-        $user = new ComplexType();
+        $user = ComplexType::create();
         $user->addElement(Element::string('name'));
         $user->addElement(Element::integer('age'));
 
@@ -203,7 +215,7 @@ class BuilderTest extends TestCase
 
     public function testIds(): void
     {
-        $book = new ComplexType();
+        $book = ComplexType::createSequence();
         $book->addElement(Element::string('isbn'));
         $book->addElement(Element::integer('title'));
         $book->addElement(Element::idRef('author-ref'));
@@ -215,24 +227,4 @@ class BuilderTest extends TestCase
 
         $this->assertMatchesSnapshot($builder->toString());
     }
-
-
-    /*
-     *
-     <xs:element name="book">
-    <xs:complexType>
-        <xs:sequence>
-            <xs:element name="isbn" type="xs:int"/>
-            <xs:element name="title" type="xs:string"/>
-            <xs:element name="author-ref">
-                <xs:complexType>
-                    <xs:attribute name="ref" type="xs:IDREF" use="required"/>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="character-refs" type="xs:IDREFS"/>
-        </xs:sequence>
-        <xs:attribute name="identifier" type="xs:ID" use="required"/>
-    </xs:complexType>
-</xs:element>
-     */
 }
