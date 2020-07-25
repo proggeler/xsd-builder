@@ -14,13 +14,13 @@ snapshots:                                                                      
 	vendor/bin/phpunit --testdox -v -d --update-snapshots $(OPTIONS)
 
 phpstan:                                                                        ## run phpstan static code analyser
-	phpstan analyse -l max src
+	vendor/bin/phpstan analyse -l max src
 
 psalm:                                                                          ## run psalm static code analyser
-	psalm $(OPTIONS) --show-info=false
+	vendor/bin/psalm $(OPTIONS) --show-info=false
 
 psalm-info:                                                                     ## run psalm static code analyser with info
-	psalm $(OPTIONS)
+	vendor/bin/psalm $(OPTIONS)
 
 php-cs-check:																	## run cs fixer (dry-run)
 	PHP_CS_FIXER_FUTURE_MODE=1 php-cs-fixer fix --allow-risky=yes --diff --dry-run
