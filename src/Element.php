@@ -25,12 +25,12 @@ class Element
         return $this->name;
     }
 
-    public function type(): string
+    public function type(): ?string
     {
         return $this->type;
     }
 
-    public function setDefault($default): void
+    public function setDefault(string $default): void
     {
         $this->default = $default;
     }

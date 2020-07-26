@@ -23,12 +23,12 @@ class Attribute
         return $this->type;
     }
 
-    public function setDefault($default): void
+    public function setDefault(string $default): void
     {
         $this->default = $default;
     }
 
-    public function setUse($use): void
+    public function setUse(string $use): void
     {
         $this->use = $use;
     }

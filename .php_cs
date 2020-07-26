@@ -5,7 +5,6 @@ $finder = PhpCsFixer\Finder::create()
 return PhpCsFixer\Config::create()
     ->setRules([
         '@PSR2' => true,
-        '@PHPUnit90Migration:risky' => true,
         'declare_strict_types' => true,
         'single_blank_line_before_namespace' => true,
         'array_syntax' => ['syntax' => 'short'],

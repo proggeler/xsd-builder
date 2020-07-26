@@ -78,7 +78,10 @@ class SimpleType
     public function createDomElement(\DOMDocument $dom): \DOMElement
     {
         $el = $dom->createElement('xs:simpleType');
-        $el->setAttribute('name', $this->name);
+
+        if ($this->name) {
+            $el->setAttribute('name', $this->name);
+        }
 
         if ($this->type) {
             $el->setAttribute('type', $this->type);
