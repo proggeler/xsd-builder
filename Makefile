@@ -14,7 +14,7 @@ snapshots:                                                                      
 	vendor/bin/phpunit --testdox -v -d --update-snapshots $(OPTIONS)
 
 phpstan:                                                                        ## run phpstan static code analyser
-	vendor/bin/phpstan analyse -l max src
+	vendor/bin/phpstan analyse
 
 psalm:                                                                          ## run psalm static code analyser
 	vendor/bin/psalm $(OPTIONS) --show-info=false
