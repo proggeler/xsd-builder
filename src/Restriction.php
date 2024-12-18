@@ -67,6 +67,40 @@ class Restriction
             return $el;
         }
 
+        if ($this->enumeration) {
+            foreach ($this->enumeration as $value) {
+                $restriction = $dom->createElement('xs:enumeration');
+                $restriction->setAttribute('value', $value);
+                $el->appendChild($restriction);
+            }
+
+            return $el;
+        }
+
+        if ($this->minLength !== null && $this->maxLength !== null) {
+            $restriction = $dom->createElement('xs:minLength');
+            $restriction->setAttribute('value', (string) $this->minLength);
+            $el->appendChild($restriction);
+
+            $restriction = $dom->createElement('xs:maxLength');
+            $restriction->setAttribute('value', (string) $this->maxLength);
+            $el->appendChild($restriction);
+
+            return $el;
+        }
+
+        if ($this->minInclusive !== null && $this->maxInclusive !== null) {
+            $restriction = $dom->createElement('xs:minInclusive');
+            $restriction->setAttribute('value', (string) $this->minInclusive);
+            $el->appendChild($restriction);
+
+            $restriction = $dom->createElement('xs:maxInclusive');
+            $restriction->setAttribute('value', (string) $this->maxInclusive);
+            $el->appendChild($restriction);
+
+            return $el;
+        }
+
         throw new \RuntimeException();
     }
 }

@@ -213,6 +213,36 @@ class BuilderTest extends TestCase
         $this->assertMatchesSnapshot($builder->toString());
     }
 
+    public function testSimpleElementWithEnumeration(): void
+    {
+        $enumeration = Restriction::enum(['a', 'b', 'c']);
+
+        $builder = new Builder();
+        $builder->addSimpleType(SimpleType::withRestriction('name', $enumeration));
+
+        $this->assertMatchesSnapshot($builder->toString());
+    }
+
+    public function testSimpleElementWithLengthRestriction(): void
+    {
+        $length = Restriction::length(0, 20);
+
+        $builder = new Builder();
+        $builder->addSimpleType(SimpleType::withRestriction('name', $length));
+
+        $this->assertMatchesSnapshot($builder->toString());
+    }
+
+    public function testSimpleElementWithRangeRestriction(): void
+    {
+        $range = Restriction::range(0, 20);
+
+        $builder = new Builder();
+        $builder->addSimpleType(SimpleType::withRestriction('name', $range));
+
+        $this->assertMatchesSnapshot($builder->toString());
+    }
+
     public function testIds(): void
     {
         $book = ComplexType::createSequence();
